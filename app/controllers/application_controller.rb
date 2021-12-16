@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
         if request.headers['token'].present?
             token = request.headers['token']
             begin
-                payload = JWT.decode(token, 'c880a82c45b11015ee1b244c01628b94cb61c6a14672a5be42a3f4db26bb3e985f5944773655971b987e46604ad7643987ad7ff946c887d8841dc62b9e461ee0').first
+                payload = JWT.decode(token, Rails.application.secrets.secret_key_base).first
                 @current_user = User.find(payload['id'])
             rescue JWT::ExpiredSignature
                 render json: { errors: "Please login!" }, status: :unauthorized
