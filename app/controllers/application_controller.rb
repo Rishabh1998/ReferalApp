@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
     def authenticate
         if request.headers['token'].present?
-            token = request.headers['token'].split(' ').last
+            token = request.headers['token']
             begin
                 payload = JWT.decode(token, Rails.application.secrets.secret_key_base).first
                 @current_user = User.find(payload['id'])
