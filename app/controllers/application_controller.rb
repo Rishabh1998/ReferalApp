@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
     def authenticate
         if request.headers['token'].present?
             token = request.headers['token']
+            puts "token: #{token}"
             begin
                 payload = JWT.decode(token, Rails.application.secrets.secret_key_base).first
                 @current_user = User.find(payload['id'])
@@ -13,7 +14,7 @@ class ApplicationController < ActionController::Base
                 render json: { errors: "Invalid Authentication" }, status: :unauthorized
             end
         else
-            render json: { errors: "Invalid Authentication" }, status: :unauthorized
+            render json: { errors: "No Authentication Found" }, status: :unauthorized
         end
     end
 end
